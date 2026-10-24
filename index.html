@@ -167,10 +167,10 @@
                             <input class="fighter-name" id="blueName" value="CHUNG" maxlength="16"
                                 aria-label="Nama atlet sudut Chung" spellcheck="false">
 
-                            <!-- Editable Score Number -->
+                            <!-- Score Number with Revision Pop-up Trigger -->
                             <div class="score-wrapper">
-                                <div class="score" id="blueScore" contenteditable="true" spellcheck="false"
-                                    title="Klik untuk revisi skor" role="textbox" aria-label="Skor atlet biru">0</div>
+                                <div class="score" id="blueScore" tabindex="0"
+                                    title="Klik untuk revisi skor (+1, +2, +3, -1, -2, -3)" role="button" aria-label="Skor atlet biru (Klik untuk revisi)">0</div>
                                 <div class="edit-hint-tag">✎ KLIK UNTUK REVISI</div>
                             </div>
 
@@ -206,10 +206,10 @@
                             <input class="fighter-name" id="redName" value="HUNG" maxlength="16"
                                 aria-label="Nama atlet sudut HUNG" spellcheck="false">
 
-                            <!-- Editable Score Number -->
+                            <!-- Score Number with Revision Pop-up Trigger -->
                             <div class="score-wrapper">
-                                <div class="score" id="redScore" contenteditable="true" spellcheck="false"
-                                    title="Klik untuk revisi skor" role="textbox" aria-label="Skor atlet merah">0</div>
+                                <div class="score" id="redScore" tabindex="0"
+                                    title="Klik untuk revisi skor (+1, +2, +3, -1, -2, -3)" role="button" aria-label="Skor atlet merah (Klik untuk revisi)">0</div>
                                 <div class="edit-hint-tag">✎ KLIK UNTUK REVISI</div>
                             </div>
 
@@ -254,10 +254,45 @@
                         </div>
 
                         <div class="secondary-controls">
-                            <!-- Button Trigger Pop-up Pengaturan Waktu & Poin Maksimal -->
-                            <button type="button" id="openSettingsBtn" class="timer-config-trigger" title="Buka Pengaturan Waktu & Poin Maksimal">
-                                <span>⚙ PENGATURAN MATCH</span>
-                            </button>
+                            <!-- Inline Timer & Max Score Configuration with Wheel Pickers -->
+                            <div class="timer-settings">
+                                <div class="picker-group">
+                                    <label for="minutesSelect" class="picker-label">MENIT</label>
+                                    <div class="wheel-select-wrapper">
+                                        <select id="minutesSelect" class="wheel-select" aria-label="Pilih Menit">
+                                            <!-- Dynamically generated 0-30 -->
+                                        </select>
+                                    </div>
+                                </div>
+                                <span class="time-sep">:</span>
+                                <div class="picker-group">
+                                    <label for="secondsSelect" class="picker-label">DETIK</label>
+                                    <div class="wheel-select-wrapper">
+                                        <select id="secondsSelect" class="wheel-select" aria-label="Pilih Detik">
+                                            <!-- Dynamically generated 0-59 -->
+                                        </select>
+                                    </div>
+                                </div>
+                                <span class="time-sep">|</span>
+                                <div class="picker-group">
+                                    <label for="maxScoreSelect" class="picker-label" title="Batas skor maksimal (0 = tanpa batas)">MAX POIN</label>
+                                    <div class="wheel-select-wrapper">
+                                        <select id="maxScoreSelect" class="wheel-select" aria-label="Pilih Batas Poin Maksimal">
+                                            <option value="0">0 (Tanpa Batas)</option>
+                                            <option value="5">5 Poin</option>
+                                            <option value="10">10 Poin</option>
+                                            <option value="12">12 Poin (Gap WT)</option>
+                                            <option value="15">15 Poin</option>
+                                            <option value="20" selected>20 Poin</option>
+                                            <option value="25">25 Poin</option>
+                                            <option value="30">30 Poin</option>
+                                            <option value="40">40 Poin</option>
+                                            <option value="50">50 Poin</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="button" id="setTimer" class="small-button" title="Terapkan Waktu & Poin Maksimal">SET</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -427,59 +462,6 @@
                 <button type="button" class="rev-btn minus-btn" id="revMinus2" data-val="-2">-2</button>
                 <button type="button" class="rev-btn minus-btn" id="revMinus3" data-val="-3">-3</button>
             </div>
-        </div>
-    </dialog>
-
-    <!-- Match Configuration Modal Dialog (Pop Up Scroll Down Seperti Alarm) -->
-    <dialog id="settingsModal" class="settings-dialog-modal">
-        <div class="modal-box settings-modal-box">
-            <div class="popover-head">
-                <span class="popover-title">⚙ PENGATURAN MATCH</span>
-                <button type="button" class="popover-close-btn" id="closeSettingsModal" aria-label="Tutup">✕</button>
-            </div>
-            
-            <div class="settings-alarm-body">
-                <div class="alarm-picker-row">
-                    <!-- Dropdown Scroll Down Menit -->
-                    <div class="alarm-field">
-                        <label for="minutesSelect" class="alarm-label">MENIT</label>
-                        <select id="minutesSelect" class="alarm-select" aria-label="Pilih Menit">
-                            <!-- Dimuat dinamis 0-99 menit -->
-                        </select>
-                    </div>
-
-                    <span class="alarm-sep">:</span>
-
-                    <!-- Dropdown Scroll Down Detik -->
-                    <div class="alarm-field">
-                        <label for="secondsSelect" class="alarm-label">DETIK</label>
-                        <select id="secondsSelect" class="alarm-select" aria-label="Pilih Detik">
-                            <!-- Dimuat dinamis 0-59 detik -->
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Dropdown Scroll Down Batas Poin Maksimal -->
-                <div class="alarm-field full-width">
-                    <label for="maxScoreSelect" class="alarm-label">BATAS POIN MAKSIMAL (POINT CEILING)</label>
-                    <select id="maxScoreSelect" class="alarm-select" aria-label="Pilih Poin Maksimal">
-                        <option value="0">0 — Tanpa Batas Poin</option>
-                        <option value="5">5 Poin</option>
-                        <option value="10">10 Poin</option>
-                        <option value="12">12 Poin (Standar Gap WT)</option>
-                        <option value="15">15 Poin</option>
-                        <option value="20" selected>20 Poin (Default)</option>
-                        <option value="25">25 Poin</option>
-                        <option value="30">30 Poin</option>
-                        <option value="40">40 Poin</option>
-                        <option value="50">50 Poin</option>
-                    </select>
-                </div>
-            </div>
-
-            <button type="button" id="applySettingsBtn" class="action-btn next-round-btn save-settings-btn">
-                <span>TERAPKAN PENGATURAN ✔</span>
-            </button>
         </div>
     </dialog>
 

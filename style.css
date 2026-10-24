@@ -1366,17 +1366,46 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+.picker-group,
 .input-group {
   display: flex;
   align-items: center;
   gap: 4px;
 }
 
+.picker-label,
 .timer-settings label {
   font-size: 8px;
   font-weight: 800;
   letter-spacing: 1px;
   color: var(--text-muted);
+}
+
+.wheel-select-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.wheel-select {
+  padding: 4px 6px;
+  background: #080b12;
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  color: #fff;
+  font-family: var(--font-digital);
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  outline: none;
+  cursor: pointer;
+  appearance: auto;
+  -webkit-appearance: menulist;
+}
+
+.wheel-select:focus {
+  border-color: var(--blue-primary);
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
 }
 
 .timer-settings input {
@@ -1402,15 +1431,16 @@ body {
 .time-sep {
   font-weight: 900;
   color: var(--text-muted);
+  font-size: 10px;
 }
 
 .small-button {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: #fff;
-  padding: 5px 10px;
+  padding: 4px 8px;
   border-radius: 6px;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 800;
   cursor: pointer;
   letter-spacing: 0.8px;
@@ -2156,13 +2186,20 @@ body {
   }
 
   .timer-settings {
-    padding: 3px 6px;
-    gap: 4px;
+    padding: 2px 4px;
+    gap: 3px;
     border-radius: 6px;
   }
 
+  .picker-label,
   .timer-settings span {
-    font-size: 8px;
+    font-size: 7.5px;
+  }
+
+  .wheel-select {
+    padding: 2px 4px !important;
+    font-size: 9px !important;
+    border-radius: 5px;
   }
 
   .timer-settings input {
@@ -2171,10 +2208,10 @@ body {
     padding: 2px;
   }
 
-  .config-btn {
-    padding: 2px 6px;
-    font-size: 8px;
-    border-radius: 5px;
+  .small-button {
+    padding: 2px 5px !important;
+    font-size: 8px !important;
+    border-radius: 4px;
   }
 
   /* Popover Revisi Skor di Mobile Landscape */

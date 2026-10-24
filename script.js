@@ -386,7 +386,7 @@ function toggleTimer() {
   }
 }
 
-function initSettingsModal() {
+function initWheelPickers() {
   const minSelect = document.getElementById("minutesSelect");
   const secSelect = document.getElementById("secondsSelect");
   const maxSelect = document.getElementById("maxScoreSelect");
@@ -395,7 +395,7 @@ function initSettingsModal() {
     for (let m = 0; m <= 30; m++) {
       const opt = document.createElement("option");
       opt.value = m;
-      opt.textContent = `${m} Menit`;
+      opt.textContent = `${m} m`;
       if (m === 2) opt.selected = true;
       minSelect.appendChild(opt);
     }
@@ -405,73 +405,56 @@ function initSettingsModal() {
     for (let s = 0; s <= 59; s += 5) {
       const opt = document.createElement("option");
       opt.value = s;
-      opt.textContent = `${s < 10 ? "0" + s : s} Detik`;
+      opt.textContent = `${s < 10 ? "0" + s : s} s`;
       if (s === 0) opt.selected = true;
       secSelect.appendChild(opt);
     }
   }
 
-  const openBtn = document.getElementById("openSettingsBtn");
-  const modal = document.getElementById("settingsModal");
-  const closeBtn = document.getElementById("closeSettingsModal");
-  const applyBtn = document.getElementById("applySettingsBtn");
-
-  if (openBtn && modal) {
-    openBtn.addEventListener("click", () => {
-      // Sync current values to dropdowns
-      const currentMins = Math.floor(configuredTime / 60);
-      const currentSecs = configuredTime % 60;
-      if (minSelect) minSelect.value = currentMins;
-      if (secSelect) secSelect.value = currentSecs;
-      if (maxSelect) maxSelect.value = maxScore;
-      if (typeof modal.showModal === "function") modal.showModal();
-    });
+  // Handle live changes when wheel picker values change
+  if (minSelect) {
+    minSelect.addEventListener("change", applyWheelTimerSettings);
   }
-
-  if (closeBtn && modal) {
-    closeBtn.addEventListener("click", () => {
-      modal.close();
-    });
+  if (secSelect) {
+    secSelect.addEventListener("change", applyWheelTimerSettings);
   }
-
-  if (modal) {
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) modal.close();
-    });
-  }
-
-  if (applyBtn && modal) {
-    applyBtn.addEventListener("click", () => {
-      const minutes = Number.parseInt(minSelect.value, 10) || 0;
-      const seconds = Number.parseInt(secSelect.value, 10) || 0;
+  if (maxSelect) {
+    maxSelect.addEventListener("change", () => {
       const parsedMax = Number.parseInt(maxSelect.value, 10);
-
-      stopTimer();
-
-      configuredTime = minutes * 60 + seconds;
-      remainingTime = configuredTime;
-
       maxScore = isNaN(parsedMax) || parsedMax < 0 ? 0 : parsedMax;
       updateMaxScoreDisplay();
-      updateTimerDisplay();
-      updateStatusIndicator("STANDBY");
-
-      modal.close();
+      checkMaxScoreWin();
     });
+  }
+
+  const setBtn = document.getElementById("setTimer");
+  if (setBtn) {
+    setBtn.addEventListener("click", applyWheelTimerSettings);
   }
 }
 
-function setTimer() {
-  // Legacy / Direct programmatic timer sync
+function applyWheelTimerSettings() {
   const minSelect = document.getElementById("minutesSelect");
   const secSelect = document.getElementById("secondsSelect");
-  if (minSelect && secSelect) {
-    const minutes = Number.parseInt(minSelect.value, 10) || 0;
-    const seconds = Number.parseInt(secSelect.value, 10) || 0;
-    configuredTime = minutes * 60 + seconds;
-    remainingTime = configuredTime;
-    updateTimerDisplay();
+  const maxSelect = document.getElementById("maxScoreSelect");
+
+  const minutes = minSelect ? (Number.parseInt(minSelect.value, 10) || 0) : 2;
+  const seconds = secSelect ? (Number.parseInt(secSelect.value, 10) || 0) : 0;
+  if (maxSelect) {
+    const parsedMax = Number.parseInt(maxSelect.value, 10);
+    maxScore = isNaN(parsedMax) || parsedMax < 0 ? 0 : parsedMax;
+    updateMaxScoreDisplay();
   }
+
+  stopTimer();
+  configuredTime = minutes * 60 + seconds;
+  remainingTime = configuredTime;
+  updateTimerDisplay();
+  updateStatusIndicator("STANDBY");
+}
+
+function setTimer() {
+  applyWheelTimerSettings();
 }
 
 function restartTimer() {
@@ -1021,7 +1004,7 @@ if (maxScoreInput) {
 
 // Initialise state
 setupEditableScores();
-initSettingsModal();
+initWheelPickers();
 updateScoreDisplay("blue");
 updateScoreDisplay("red");
 updateGamjeomDisplay("blue");
