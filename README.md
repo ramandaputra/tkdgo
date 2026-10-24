@@ -1,5 +1,9 @@
 # TAEKWONDO GO 🥋🎮
 
+[![Demo Live](https://img.shields.io/badge/Demo-Live%20Preview-success?style=for-the-badge&logo=github)](https://ramandaputra.github.io/tkdgo/)
+
+🔗 **Live Demo:** [https://ramandaputra.github.io/tkdgo/](https://ramandaputra.github.io/tkdgo/)
+
 **Taekwondo Go** adalah aplikasi papan skor digital profesional bergaya *dual-sided handheld gamepad controller* yang dirancang khusus untuk pertandingan Taekwondo modern dengan sistem **Best of 3 Rounds** sesuai standar World Taekwondo (WT).
 
 ---
