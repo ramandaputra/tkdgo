@@ -532,26 +532,53 @@ function adjustScore(side, delta) {
   }
 }
 
+let activeRevisionSide = null;
+
+function openScoreRevisionModal(side) {
+  activeRevisionSide = side;
+  const modal = document.getElementById("revisionModal");
+  const title = document.getElementById("revisionModalTitle");
+  const currentVal = document.getElementById("revisionCurrentScore");
+  const box = modal.querySelector(".revision-modal-box");
+
+  const fighterName = side === "blue" 
+    ? (document.getElementById("blueName").value.trim() || "CHUNG") 
+    : (document.getElementById("redName").value.trim() || "HUNG");
+
+  if (title) title.textContent = `REVISI SKOR ${fighterName.toUpperCase()}`;
+  if (currentVal) currentVal.textContent = scores[side];
+
+  if (box) {
+    box.classList.remove("blue-revision-theme", "red-revision-theme");
+    box.classList.add(side === "blue" ? "blue-revision-theme" : "red-revision-theme");
+  }
+
+  if (modal && typeof modal.showModal === "function") {
+    modal.showModal();
+  }
+}
+
+function closeScoreRevisionModal() {
+  const modal = document.getElementById("revisionModal");
+  if (modal && modal.open) {
+    modal.close();
+  }
+  activeRevisionSide = null;
+}
+
 function closeAllScorePopovers() {
-  const bluePop = document.getElementById("blueScorePopover");
-  const redPop = document.getElementById("redScorePopover");
-  if (bluePop) bluePop.style.display = "none";
-  if (redPop) redPop.style.display = "none";
+  closeScoreRevisionModal();
 }
 
 function setupEditableScores() {
   ["blue", "red"].forEach((side) => {
     const scoreElem = document.getElementById(side + "Score");
-    const popover = document.getElementById(side + "ScorePopover");
     if (!scoreElem) return;
 
-    // Click score -> show revision popover (+1, +2, +3, -1, -2, -3)
+    // Click score -> open native revision dialog popup
     scoreElem.addEventListener("click", (e) => {
       e.stopPropagation();
-      closeAllScorePopovers();
-      if (popover) {
-        popover.style.display = "flex";
-      }
+      openScoreRevisionModal(side);
     });
 
     // Key handling: allow only digits and Enter to blur
@@ -580,30 +607,37 @@ function setupEditableScores() {
     });
   });
 
-  // Revision buttons (+1, +2, +3, -1, -2, -3)
+  // Revision buttons inside modal dialog
   document.querySelectorAll(".rev-btn").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
-      const side = btn.dataset.side;
+      const targetSide = activeRevisionSide || btn.dataset.side;
+      if (!targetSide) return;
       const val = parseInt(btn.dataset.val, 10);
-      adjustScore(side, val);
+      adjustScore(targetSide, val);
+      const currentVal = document.getElementById("revisionCurrentScore");
+      if (currentVal) currentVal.textContent = scores[targetSide];
     });
   });
 
-  // Close popover buttons
-  document.querySelectorAll(".popover-close-btn").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
+  // Close revision modal button
+  const closeRevBtn = document.getElementById("closeRevisionModal");
+  if (closeRevBtn) {
+    closeRevBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-      closeAllScorePopovers();
+      closeScoreRevisionModal();
     });
-  });
+  }
 
-  // Close popover when clicking anywhere outside
-  document.addEventListener("click", (e) => {
-    if (!e.target.closest(".score-wrapper")) {
-      closeAllScorePopovers();
-    }
-  });
+  // Close when clicking modal backdrop
+  const revModal = document.getElementById("revisionModal");
+  if (revModal) {
+    revModal.addEventListener("click", (e) => {
+      if (e.target === revModal) {
+        closeScoreRevisionModal();
+      }
+    });
+  }
 }
 
 // ==========================================

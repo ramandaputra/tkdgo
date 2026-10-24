@@ -167,36 +167,11 @@
                             <input class="fighter-name" id="blueName" value="CHUNG" maxlength="16"
                                 aria-label="Nama atlet sudut Chung" spellcheck="false">
 
-                            <!-- Editable Score Number with Quick Revision Popover -->
+                            <!-- Editable Score Number -->
                             <div class="score-wrapper">
                                 <div class="score" id="blueScore" contenteditable="true" spellcheck="false"
                                     title="Klik untuk revisi skor" role="textbox" aria-label="Skor atlet biru">0</div>
                                 <div class="edit-hint-tag">✎ KLIK UNTUK REVISI</div>
-
-                                <!-- Quick Score Revision Popover for Blue -->
-                                <div class="score-revision-popover" id="blueScorePopover" style="display: none;">
-                                    <div class="popover-head">
-                                        <span class="popover-title">REVISI SKOR CHUNG</span>
-                                        <button type="button" class="popover-close-btn" data-close="blue"
-                                            aria-label="Tutup">✕</button>
-                                    </div>
-                                    <div class="popover-row plus-row">
-                                        <button type="button" class="rev-btn plus-btn" data-side="blue"
-                                            data-val="1">+1</button>
-                                        <button type="button" class="rev-btn plus-btn" data-side="blue"
-                                            data-val="2">+2</button>
-                                        <button type="button" class="rev-btn plus-btn" data-side="blue"
-                                            data-val="3">+3</button>
-                                    </div>
-                                    <div class="popover-row minus-row">
-                                        <button type="button" class="rev-btn minus-btn" data-side="blue"
-                                            data-val="-1">-1</button>
-                                        <button type="button" class="rev-btn minus-btn" data-side="blue"
-                                            data-val="-2">-2</button>
-                                        <button type="button" class="rev-btn minus-btn" data-side="blue"
-                                            data-val="-3">-3</button>
-                                    </div>
-                                </div>
                             </div>
 
                             <!-- Gamjeom Counter for Blue -->
@@ -231,36 +206,11 @@
                             <input class="fighter-name" id="redName" value="HUNG" maxlength="16"
                                 aria-label="Nama atlet sudut HUNG" spellcheck="false">
 
-                            <!-- Editable Score Number with Quick Revision Popover -->
+                            <!-- Editable Score Number -->
                             <div class="score-wrapper">
                                 <div class="score" id="redScore" contenteditable="true" spellcheck="false"
                                     title="Klik untuk revisi skor" role="textbox" aria-label="Skor atlet merah">0</div>
                                 <div class="edit-hint-tag">✎ KLIK UNTUK REVISI</div>
-
-                                <!-- Quick Score Revision Popover for Red -->
-                                <div class="score-revision-popover" id="redScorePopover" style="display: none;">
-                                    <div class="popover-head">
-                                        <span class="popover-title">REVISI SKOR HUNG</span>
-                                        <button type="button" class="popover-close-btn" data-close="red"
-                                            aria-label="Tutup">✕</button>
-                                    </div>
-                                    <div class="popover-row plus-row">
-                                        <button type="button" class="rev-btn plus-btn" data-side="red"
-                                            data-val="1">+1</button>
-                                        <button type="button" class="rev-btn plus-btn" data-side="red"
-                                            data-val="2">+2</button>
-                                        <button type="button" class="rev-btn plus-btn" data-side="red"
-                                            data-val="3">+3</button>
-                                    </div>
-                                    <div class="popover-row minus-row">
-                                        <button type="button" class="rev-btn minus-btn" data-side="red"
-                                            data-val="-1">-1</button>
-                                        <button type="button" class="rev-btn minus-btn" data-side="red"
-                                            data-val="-2">-2</button>
-                                        <button type="button" class="rev-btn minus-btn" data-side="red"
-                                            data-val="-3">-3</button>
-                                    </div>
-                                </div>
                             </div>
 
                             <!-- Gamjeom Counter for Red -->
@@ -468,6 +418,30 @@
                 <button id="resetMatchModalBtn" class="action-btn reset-btn-modal" style="display: none;">
                     <span>RESET PERTANDINGAN BARU ⟲</span>
                 </button>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- Score Revision Modal Dialog (Pop Up Penuh di Tengah Layar) -->
+    <dialog id="revisionModal" class="revision-dialog-modal">
+        <div class="modal-box revision-modal-box">
+            <div class="popover-head">
+                <span class="popover-title" id="revisionModalTitle">REVISI SKOR CHUNG</span>
+                <button type="button" class="popover-close-btn" id="closeRevisionModal" aria-label="Tutup">✕</button>
+            </div>
+            <div class="revision-modal-current">
+                <span class="rev-current-label">SKOR SAAT INI:</span>
+                <strong class="rev-current-val" id="revisionCurrentScore">0</strong>
+            </div>
+            <div class="popover-row plus-row">
+                <button type="button" class="rev-btn plus-btn" id="revPlus1" data-val="1">+1</button>
+                <button type="button" class="rev-btn plus-btn" id="revPlus2" data-val="2">+2</button>
+                <button type="button" class="rev-btn plus-btn" id="revPlus3" data-val="3">+3</button>
+            </div>
+            <div class="popover-row minus-row">
+                <button type="button" class="rev-btn minus-btn" id="revMinus1" data-val="-1">-1</button>
+                <button type="button" class="rev-btn minus-btn" id="revMinus2" data-val="-2">-2</button>
+                <button type="button" class="rev-btn minus-btn" id="revMinus3" data-val="-3">-3</button>
             </div>
         </div>
     </dialog>
