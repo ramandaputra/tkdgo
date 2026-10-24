@@ -1650,6 +1650,122 @@ body {
 }
 
 /* ====================================================
+   MATCH SETTINGS TRIGGER & MODAL DIALOG
+   ==================================================== */
+.timer-config-trigger {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #94a3b8;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.timer-config-trigger:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.settings-dialog-modal {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  border: none;
+  background: transparent;
+  padding: 10px;
+  max-width: 100vw;
+  max-height: 100vh;
+  max-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10006;
+}
+
+.settings-dialog-modal:not([open]) {
+  display: none !important;
+}
+
+.settings-dialog-modal::backdrop {
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+}
+
+.settings-modal-box {
+  width: min(400px, 92vw);
+  background: #111624;
+  border: 2px solid #2a3754;
+  border-radius: 20px;
+  padding: clamp(12px, 2.5vh, 20px);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.95);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 2vh, 14px);
+  animation: popInModal 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.settings-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.setting-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+}
+
+.setting-field.full-width {
+  grid-column: span 2;
+}
+
+.setting-field label {
+  font-size: 8.5px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+}
+
+.styled-select {
+  width: 100%;
+  background: #161d2d;
+  color: #f8fafc;
+  border: 1.5px solid #2d3b55;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 32px;
+}
+
+.styled-select:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
+}
+
+.save-settings-btn {
+  margin-top: 4px;
+}
+
+/* ====================================================
    SHORTCUTS MODAL
    ==================================================== */
 .shortcuts-modal {
@@ -2334,9 +2450,35 @@ body {
     gap: 4px !important;
   }
 
-  .action-btn {
+  /* Modal Pengaturan Match di Landscape */
+  .settings-dialog-modal {
+    padding: 4px !important;
+  }
+
+  .settings-modal-box {
+    width: min(360px, 92vw) !important;
+    padding: 8px 12px !important;
+    gap: 6px !important;
+    border-radius: 12px !important;
+  }
+
+  .settings-form-grid {
+    gap: 6px !important;
+  }
+
+  .setting-field label {
+    font-size: 7.5px !important;
+  }
+
+  .styled-select {
+    padding: 6px 8px !important;
+    font-size: 11px !important;
+    border-radius: 6px !important;
+    background-position: right 6px center !important;
+  }
+
+  .save-settings-btn {
     padding: 6px 4px !important;
     font-size: 9.5px !important;
-    border-radius: 6px !important;
   }
 }

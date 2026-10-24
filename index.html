@@ -169,8 +169,8 @@
 
                             <!-- Editable Score Number -->
                             <div class="score-wrapper">
-                                <div class="score" id="blueScore" contenteditable="true" spellcheck="false"
-                                    title="Klik untuk revisi skor" role="textbox" aria-label="Skor atlet biru">0</div>
+                                <div class="score" id="blueScore" tabindex="0" role="button"
+                                    title="Klik untuk buka revisi skor" aria-label="Skor atlet biru">0</div>
                                 <div class="edit-hint-tag">✎ KLIK UNTUK REVISI</div>
                             </div>
 
@@ -208,8 +208,8 @@
 
                             <!-- Editable Score Number -->
                             <div class="score-wrapper">
-                                <div class="score" id="redScore" contenteditable="true" spellcheck="false"
-                                    title="Klik untuk revisi skor" role="textbox" aria-label="Skor atlet merah">0</div>
+                                <div class="score" id="redScore" tabindex="0" role="button"
+                                    title="Klik untuk buka revisi skor" aria-label="Skor atlet merah">0</div>
                                 <div class="edit-hint-tag">✎ KLIK UNTUK REVISI</div>
                             </div>
 
@@ -254,26 +254,10 @@
                         </div>
 
                         <div class="secondary-controls">
-                            <!-- Timer & Max Score Configuration -->
-                            <div class="timer-settings">
-                                <div class="input-group">
-                                    <label for="minutes">MENIT</label>
-                                    <input id="minutes" type="number" min="0" max="99" value="2">
-                                </div>
-                                <span class="time-sep">:</span>
-                                <div class="input-group">
-                                    <label for="seconds">DETIK</label>
-                                    <input id="seconds" type="number" min="0" max="59" value="0">
-                                </div>
-                                <span class="time-sep">|</span>
-                                <div class="input-group">
-                                    <label for="maxScoreInput" title="Batas skor maksimal (0 = tanpa batas)">MAX
-                                        POIN</label>
-                                    <input id="maxScoreInput" type="number" min="0" max="99" value="20"
-                                        title="Nilai maksimal ronde (0 = tanpa batas)">
-                                </div>
-                                <button id="setTimer" class="small-button" title="Terapkan Pengaturan">SET</button>
-                            </div>
+                            <!-- Quick Settings Popup Trigger Button -->
+                            <button id="openMatchSettings" class="timer-config-trigger" title="Buka Pengaturan Waktu & Poin Maksimal">
+                                <span>⚙ PENGATURAN MATCH</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -443,6 +427,60 @@
                 <button type="button" class="rev-btn minus-btn" id="revMinus2" data-val="-2">-2</button>
                 <button type="button" class="rev-btn minus-btn" id="revMinus3" data-val="-3">-3</button>
             </div>
+        </div>
+    </dialog>
+
+    <!-- Match Configuration Modal Dialog (Pop Up Pengaturan Waktu & Poin Maksimal) -->
+    <dialog id="settingsModal" class="settings-dialog-modal">
+        <div class="modal-box settings-modal-box">
+            <div class="popover-head">
+                <span class="popover-title">⚙ PENGATURAN MATCH</span>
+                <button type="button" class="popover-close-btn" id="closeSettingsModal" aria-label="Tutup">✕</button>
+            </div>
+            
+            <div class="settings-form-grid">
+                <!-- Dropdown / Select Menit -->
+                <div class="setting-field">
+                    <label for="minutesSelect">DURASI MENIT</label>
+                    <select id="minutesSelect" class="styled-select" aria-label="Pilih Menit">
+                        <option value="0">0 Menit</option>
+                        <option value="1">1 Menit</option>
+                        <option value="2" selected>2 Menit (Standar)</option>
+                        <option value="3">3 Menit</option>
+                        <option value="4">4 Menit</option>
+                        <option value="5">5 Menit</option>
+                    </select>
+                </div>
+
+                <!-- Dropdown / Select Detik -->
+                <div class="setting-field">
+                    <label for="secondsSelect">DURASI DETIK</label>
+                    <select id="secondsSelect" class="styled-select" aria-label="Pilih Detik">
+                        <option value="0" selected>00 Detik</option>
+                        <option value="15">15 Detik</option>
+                        <option value="30">30 Detik</option>
+                        <option value="45">45 Detik</option>
+                    </select>
+                </div>
+
+                <!-- Dropdown / Select Poin Maksimal -->
+                <div class="setting-field full-width">
+                    <label for="maxScoreSelect">BATAS MAKSIMAL POIN (POINT GAP/CEILING)</label>
+                    <select id="maxScoreSelect" class="styled-select" aria-label="Pilih Poin Maksimal">
+                        <option value="0">Tanpa Batas Poin (Selesai Waktu)</option>
+                        <option value="10">10 Poin</option>
+                        <option value="12">12 Poin (Gap WT)</option>
+                        <option value="15">15 Poin</option>
+                        <option value="20" selected>20 Poin (Default)</option>
+                        <option value="25">25 Poin</option>
+                        <option value="30">30 Poin</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="button" id="saveMatchSettings" class="action-btn next-round-btn save-settings-btn">
+                <span>SIMPAN & TERAPKAN PENGATURAN ✔</span>
+            </button>
         </div>
     </dialog>
 

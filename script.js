@@ -386,41 +386,57 @@ function toggleTimer() {
   }
 }
 
-function setTimer() {
-  const minutesInput = document.getElementById("minutes");
-  const secondsInput = document.getElementById("seconds");
+function openSettingsModal() {
+  const modal = document.getElementById("settingsModal");
+  if (!modal) return;
 
-  const minutes = Number.parseInt(minutesInput.value, 10);
-  const seconds = Number.parseInt(secondsInput.value, 10);
+  const currentMinutes = Math.floor(configuredTime / 60);
+  const currentSeconds = configuredTime % 60;
 
-  if (
-    minutesInput.value.trim() === "" ||
-    secondsInput.value.trim() === "" ||
-    !Number.isInteger(minutes) ||
-    !Number.isInteger(seconds) ||
-    minutes < 0 ||
-    minutes > 99 ||
-    seconds < 0 ||
-    seconds > 59
-  ) {
-    alert("Masukkan menit 0–99 dan detik 0–59.");
-    return;
+  const minSelect = document.getElementById("minutesSelect");
+  const secSelect = document.getElementById("secondsSelect");
+  const maxSelect = document.getElementById("maxScoreSelect");
+
+  if (minSelect) minSelect.value = currentMinutes.toString();
+  if (secSelect) secSelect.value = currentSeconds.toString();
+  if (maxSelect) maxSelect.value = maxScore.toString();
+
+  if (typeof modal.showModal === "function") {
+    modal.showModal();
   }
+}
+
+function closeSettingsModal() {
+  const modal = document.getElementById("settingsModal");
+  if (modal && modal.open) {
+    modal.close();
+  }
+}
+
+function applySettingsFromModal() {
+  const minSelect = document.getElementById("minutesSelect");
+  const secSelect = document.getElementById("secondsSelect");
+  const maxSelect = document.getElementById("maxScoreSelect");
+
+  const minutes = Number.parseInt(minSelect ? minSelect.value : "2", 10) || 0;
+  const seconds = Number.parseInt(secSelect ? secSelect.value : "0", 10) || 0;
+  const newMax = Number.parseInt(maxSelect ? maxSelect.value : "20", 10) || 0;
 
   stopTimer();
 
   configuredTime = minutes * 60 + seconds;
   remainingTime = configuredTime;
+  maxScore = newMax;
 
-  const maxScoreInput = document.getElementById("maxScoreInput");
-  if (maxScoreInput) {
-    const parsedMax = Number.parseInt(maxScoreInput.value, 10);
-    maxScore = isNaN(parsedMax) || parsedMax < 0 ? 0 : parsedMax;
-    updateMaxScoreDisplay();
-  }
-
+  updateMaxScoreDisplay();
   updateTimerDisplay();
   updateStatusIndicator("STANDBY");
+
+  closeSettingsModal();
+}
+
+function setTimer() {
+  applySettingsFromModal();
 }
 
 function restartTimer() {
@@ -833,9 +849,44 @@ document.querySelectorAll(".undo-button").forEach((button) => {
 
 startPauseButton.addEventListener("click", toggleTimer);
 if (endRoundBtn) endRoundBtn.addEventListener("click", finishRound);
-document.getElementById("setTimer").addEventListener("click", setTimer);
+const setTimerBtn = document.getElementById("setTimer");
+if (setTimerBtn) setTimerBtn.addEventListener("click", setTimer);
 document.getElementById("restartTimer").addEventListener("click", restartTimer);
 document.getElementById("resetMatch").addEventListener("click", resetMatch);
+
+// Match Settings Modal Trigger & Buttons
+const openSettingsBtn = document.getElementById("openMatchSettings");
+if (openSettingsBtn) {
+  openSettingsBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    openSettingsModal();
+  });
+}
+
+const closeSettingsBtn = document.getElementById("closeSettingsModal");
+if (closeSettingsBtn) {
+  closeSettingsBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    closeSettingsModal();
+  });
+}
+
+const saveSettingsBtn = document.getElementById("saveMatchSettings");
+if (saveSettingsBtn) {
+  saveSettingsBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    applySettingsFromModal();
+  });
+}
+
+const settingsModalEl = document.getElementById("settingsModal");
+if (settingsModalEl) {
+  settingsModalEl.addEventListener("click", (e) => {
+    if (e.target === settingsModalEl) {
+      closeSettingsModal();
+    }
+  });
+}
 
 // Tie-breaker decisions
 if (tieBlueWins) {
