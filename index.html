@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Taekwondo Match Controller</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Outfit:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Floating point effect container -->
+    <div id="floatContainer" class="float-container" aria-hidden="true"></div>
+
+    <div class="app-wrapper">
+        <!-- Top Bar Controls -->
+        <header class="controller-topbar">
+            <div class="brand">
+                <div class="brand-icon">
+                    <img src="icon/app.svg" alt="Taekwondo App Logo" class="brand-logo-img">
+                </div>
+                <div>
+                    <h1>TAEKWONDO GO</h1>
+                    <p>CONTROLLER • BEST OF 3 • BATCH 2026</p>
+                </div>
+            </div>
+
+            <div class="topbar-actions">
+                <div class="live-status" id="systemStatus">
+                    <span class="live-dot" id="liveDot"></span>
+                    <span id="liveStatusText">STANDBY</span>
+                </div>
+                <button id="soundToggle" class="topbar-btn" title="Toggle Suara Efek" aria-label="Toggle Suara">
+                    <span class="sound-icon" id="soundIcon">🔊</span>
+                </button>
+                <button id="keyHelpToggle" class="topbar-btn" title="Petunjuk Tombol Keyboard"
+                    aria-label="Keyboard Shortcuts">
+                    <span>⌨</span>
+                </button>
+                <button id="fullscreenToggle" class="topbar-btn" title="Layar Penuh" aria-label="Fullscreen">
+                    <span>⛶</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Gamepad Chassis -->
+        <main class="gamepad-chassis">
+
+            <!-- LEFT CONTROLLER WING (CHUNG) -->
+            <section class="controller-wing blue-wing" aria-label="Kontrol Sudut Chung">
+                <div class="wing-inner">
+                    <div class="wing-header">
+                        <div class="corner-pill">
+                            <span class="dot blue-dot"></span>
+                            <span>CHUNG</span>
+                        </div>
+                        <span class="player-tag">P1 CONTROLLER</span>
+                    </div>
+
+                    <!-- L1 Shoulder Trigger: Undo -->
+                    <button class="undo-button shoulder-button blue-shoulder" data-undo="blue" id="blueUndo"
+                        title="Batalkan poin terakhir sudut biru">
+                        <div class="shoulder-glow"></div>
+                        <div class="shoulder-content">
+                            <span class="shoulder-label">L1</span>
+                            <span class="shoulder-text">↶ UNDO POIN</span>
+                        </div>
+                    </button>
+
+                    <!-- Action Buttons Pad (2x3 Grid with Large SVG Icons) -->
+                    <div class="score-pad">
+                        <!-- Row 1: (+3) & (+6) -->
+                        <button class="score-button blue-btn" data-side="blue" data-points="3" data-key="Q"
+                            title="+3 Poin">
+                            <img src="icon/poin 3.svg" class="btn-svg-icon" alt="+3">
+                            <strong class="btn-points">+3</strong>
+                        </button>
+
+                        <button class="score-button blue-btn spin-btn" data-side="blue" data-points="6" data-key="W"
+                            title="+6 Poin">
+                            <img src="icon/poin 6.svg" class="btn-svg-icon" alt="+6">
+                            <strong class="btn-points">+6</strong>
+                        </button>
+
+                        <!-- Row 2: (+2) & (+4) -->
+                        <button class="score-button blue-btn" data-side="blue" data-points="2" data-key="A"
+                            title="+2 Poin">
+                            <img src="icon/poin 2.svg" class="btn-svg-icon" alt="+2">
+                            <strong class="btn-points">+2</strong>
+                        </button>
+
+                        <button class="score-button blue-btn spin-btn" data-side="blue" data-points="4" data-key="S"
+                            title="+4 Poin">
+                            <img src="icon/poin 4.svg" class="btn-svg-icon" alt="+4">
+                            <strong class="btn-points">+4</strong>
+                        </button>
+
+                        <!-- Row 3: (+1) & Gam-jeom -->
+                        <button class="score-button blue-btn fist-button" data-side="blue" data-points="1" data-key="D"
+                            title="+1 Poin">
+                            <img src="icon/poin 1.svg" class="btn-svg-icon" alt="+1">
+                            <strong class="btn-points">+1</strong>
+                        </button>
+
+                        <button class="score-button gamjeom-button blue-gamjeom-btn" data-side="blue"
+                            data-action="gamjeom" data-key="E" title="Gam-jeom (Lawan +1)">
+                            <img src="icon/gamjeom.svg" class="btn-svg-icon gamjeom-svg-icon" alt="Gamjeom">
+                            <strong class="btn-points penalty-val">+1</strong>
+                        </button>
+                    </div>
+
+                    <!-- Controller Grip Accent Details -->
+                    <div class="grip-texture">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CENTER DISPLAY UNIT (OLED MONITOR & CONSOLE CONTROLS) -->
+            <section class="controller-screen-unit" aria-label="Layar Pertandingan">
+                <div class="oled-monitor">
+                    <!-- Screen Header: Match Timer & Round Indicator -->
+                    <div class="timer-card">
+                        <div class="timer-top-row">
+                            <!-- Blue Round Wins -->
+                            <div class="round-tracker blue-tracker">
+                                <span class="tracker-label">CHUNG RND</span>
+                                <div class="round-dots" id="blueRoundDots">
+                                    <span class="round-dot" id="bDot1" title="Ronde 1"></span>
+                                    <span class="round-dot" id="bDot2" title="Ronde 2"></span>
+                                </div>
+                            </div>
+
+                            <!-- Round Badge & Max Score Badge -->
+                            <div class="round-center-box">
+                                <span class="round-badge" id="roundBadge">RONDE 1</span>
+                                <span class="max-score-badge" id="maxScoreBadge">MAX: 20 POIN</span>
+                            </div>
+
+                            <!-- Red Round Wins -->
+                            <div class="round-tracker red-tracker">
+                                <span class="tracker-label">HUNG RND</span>
+                                <div class="round-dots" id="redRoundDots">
+                                    <span class="round-dot" id="rDot1" title="Ronde 1"></span>
+                                    <span class="round-dot" id="rDot2" title="Ronde 2"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Big Digital Timer -->
+                        <div class="timer-display" id="timer">02:00</div>
+                    </div>
+
+                    <!-- Center Scoreboard: Blue vs Red with Gamjeom & Editable Scores -->
+                    <div class="match-scoreboard">
+                        <!-- Chung Corner Display -->
+                        <div class="screen-fighter blue-screen-fighter">
+                            <div class="fighter-badge">
+                                <span class="badge-dot blue-dot"></span>
+                                <span>CHUNG</span>
+                            </div>
+                            <input class="fighter-name" id="blueName" value="CHUNG" maxlength="16"
+                                aria-label="Nama atlet sudut Chung" spellcheck="false">
+
+                            <!-- Editable Score Number with Quick Revision Popover -->
+                            <div class="score-wrapper">
+                                <div class="score" id="blueScore" contenteditable="true" spellcheck="false"
+                                    title="Klik untuk revisi skor" role="textbox" aria-label="Skor atlet biru">0</div>
+                                <div class="edit-hint-tag">✎ KLIK UNTUK REVISI</div>
+
+                                <!-- Quick Score Revision Popover for Blue -->
+                                <div class="score-revision-popover" id="blueScorePopover" style="display: none;">
+                                    <div class="popover-head">
+                                        <span class="popover-title">REVISI SKOR CHUNG</span>
+                                        <button type="button" class="popover-close-btn" data-close="blue"
+                                            aria-label="Tutup">✕</button>
+                                    </div>
+                                    <div class="popover-row plus-row">
+                                        <button type="button" class="rev-btn plus-btn" data-side="blue"
+                                            data-val="1">+1</button>
+                                        <button type="button" class="rev-btn plus-btn" data-side="blue"
+                                            data-val="2">+2</button>
+                                        <button type="button" class="rev-btn plus-btn" data-side="blue"
+                                            data-val="3">+3</button>
+                                    </div>
+                                    <div class="popover-row minus-row">
+                                        <button type="button" class="rev-btn minus-btn" data-side="blue"
+                                            data-val="-1">-1</button>
+                                        <button type="button" class="rev-btn minus-btn" data-side="blue"
+                                            data-val="-2">-2</button>
+                                        <button type="button" class="rev-btn minus-btn" data-side="blue"
+                                            data-val="-3">-3</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Gamjeom Counter for Blue -->
+                            <div class="gamjeom-counter-bar" id="blueGamjeomBar">
+                                <div class="gamjeom-bar-head">
+                                    <span>GAM-JEOM</span>
+                                    <strong id="blueGamjeomText">0/5</strong>
+                                </div>
+                                <div class="gamjeom-pips" id="blueGamjeomPips">
+                                    <span class="pip"></span>
+                                    <span class="pip"></span>
+                                    <span class="pip"></span>
+                                    <span class="pip"></span>
+                                    <span class="pip"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- VS Center Badge -->
+                        <div class="vs-center">
+                            <div class="vs-pill">VS</div>
+                            <div class="vs-pulse-line"></div>
+                            <span class="vs-rules-hint">BEST OF 3</span>
+                        </div>
+
+                        <!-- HUNG Corner Display -->
+                        <div class="screen-fighter red-screen-fighter">
+                            <div class="fighter-badge">
+                                <span class="badge-dot red-dot"></span>
+                                <span>HUNG</span>
+                            </div>
+                            <input class="fighter-name" id="redName" value="HUNG" maxlength="16"
+                                aria-label="Nama atlet sudut HUNG" spellcheck="false">
+
+                            <!-- Editable Score Number with Quick Revision Popover -->
+                            <div class="score-wrapper">
+                                <div class="score" id="redScore" contenteditable="true" spellcheck="false"
+                                    title="Klik untuk revisi skor" role="textbox" aria-label="Skor atlet merah">0</div>
+                                <div class="edit-hint-tag">✎ KLIK UNTUK REVISI</div>
+
+                                <!-- Quick Score Revision Popover for Red -->
+                                <div class="score-revision-popover" id="redScorePopover" style="display: none;">
+                                    <div class="popover-head">
+                                        <span class="popover-title">REVISI SKOR HUNG</span>
+                                        <button type="button" class="popover-close-btn" data-close="red"
+                                            aria-label="Tutup">✕</button>
+                                    </div>
+                                    <div class="popover-row plus-row">
+                                        <button type="button" class="rev-btn plus-btn" data-side="red"
+                                            data-val="1">+1</button>
+                                        <button type="button" class="rev-btn plus-btn" data-side="red"
+                                            data-val="2">+2</button>
+                                        <button type="button" class="rev-btn plus-btn" data-side="red"
+                                            data-val="3">+3</button>
+                                    </div>
+                                    <div class="popover-row minus-row">
+                                        <button type="button" class="rev-btn minus-btn" data-side="red"
+                                            data-val="-1">-1</button>
+                                        <button type="button" class="rev-btn minus-btn" data-side="red"
+                                            data-val="-2">-2</button>
+                                        <button type="button" class="rev-btn minus-btn" data-side="red"
+                                            data-val="-3">-3</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Gamjeom Counter for Red -->
+                            <div class="gamjeom-counter-bar" id="redGamjeomBar">
+                                <div class="gamjeom-bar-head">
+                                    <span>GAM-JEOM</span>
+                                    <strong id="redGamjeomText">0/5</strong>
+                                </div>
+                                <div class="gamjeom-pips" id="redGamjeomPips">
+                                    <span class="pip"></span>
+                                    <span class="pip"></span>
+                                    <span class="pip"></span>
+                                    <span class="pip"></span>
+                                    <span class="pip"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Center Gamepad Controls (Start/Pause, End Round, Reset Waktu, Reset Match) -->
+                    <div class="center-controls-panel">
+                        <div class="primary-controls">
+                            <button id="startPause" class="timer-button start" title="Mulai atau jeda pertandingan">
+                                <span class="btn-play-icon">▶</span>
+                                <span class="btn-text">MULAI</span>
+                            </button>
+                            <button id="endRoundBtn" class="timer-button end-round-btn"
+                                title="Tentukan pemenang ronde sekarang">
+                                <span class="btn-text">SELESAI RONDE</span>
+                            </button>
+                            <button id="restartTimer" class="timer-button restart"
+                                title="Ulangi waktu ronde ke durasi awal">
+                                <span>↻</span>
+                                <span class="btn-text">RESET WAKTU</span>
+                            </button>
+                            <button id="resetMatch" class="timer-button reset-match-btn"
+                                title="Reset total pertandingan ke Ronde 1">
+                                <span>⟲</span>
+                                <span class="btn-text">RESET MATCH</span>
+                            </button>
+                        </div>
+
+                        <div class="secondary-controls">
+                            <!-- Timer & Max Score Configuration -->
+                            <div class="timer-settings">
+                                <div class="input-group">
+                                    <label for="minutes">MENIT</label>
+                                    <input id="minutes" type="number" min="0" max="99" value="2">
+                                </div>
+                                <span class="time-sep">:</span>
+                                <div class="input-group">
+                                    <label for="seconds">DETIK</label>
+                                    <input id="seconds" type="number" min="0" max="59" value="0">
+                                </div>
+                                <span class="time-sep">|</span>
+                                <div class="input-group">
+                                    <label for="maxScoreInput" title="Batas skor maksimal (0 = tanpa batas)">MAX
+                                        POIN</label>
+                                    <input id="maxScoreInput" type="number" min="0" max="99" value="20"
+                                        title="Nilai maksimal ronde (0 = tanpa batas)">
+                                </div>
+                                <button id="setTimer" class="small-button" title="Terapkan Pengaturan">SET</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RIGHT CONTROLLER WING (HUNG) -->
+            <section class="controller-wing red-wing" aria-label="Kontrol Sudut HUNG">
+                <div class="wing-inner">
+                    <div class="wing-header">
+                        <span class="player-tag">P2 CONTROLLER</span>
+                        <div class="corner-pill red-pill">
+                            <span>HUNG</span>
+                            <span class="dot red-dot"></span>
+                        </div>
+                    </div>
+
+                    <!-- R1 Shoulder Trigger: Undo -->
+                    <button class="undo-button shoulder-button red-shoulder" data-undo="red" id="redUndo"
+                        title="Batalkan poin terakhir sudut HUNG">
+                        <div class="shoulder-glow"></div>
+                        <div class="shoulder-content">
+                            <span class="shoulder-label">R1</span>
+                            <span class="shoulder-text">↶ UNDO POIN</span>
+                        </div>
+                    </button>
+
+                    <!-- Action Buttons Pad (2x3 Grid - MIRRORED from Blue) -->
+                    <div class="score-pad">
+                        <!-- Row 1: (+6) & (+3) [mirrored] -->
+                        <button class="score-button red-btn spin-btn" data-side="red" data-points="6" data-key="I"
+                            title="+6 Poin">
+                            <img src="icon/poin 6.svg" class="btn-svg-icon" alt="+6">
+                            <strong class="btn-points">+6</strong>
+                        </button>
+
+                        <button class="score-button red-btn" data-side="red" data-points="3" data-key="U"
+                            title="+3 Poin">
+                            <img src="icon/poin 3.svg" class="btn-svg-icon" alt="+3">
+                            <strong class="btn-points">+3</strong>
+                        </button>
+
+                        <!-- Row 2: (+4) & (+2) [mirrored] -->
+                        <button class="score-button red-btn spin-btn" data-side="red" data-points="4" data-key="K"
+                            title="+4 Poin">
+                            <img src="icon/poin 4.svg" class="btn-svg-icon" alt="+4">
+                            <strong class="btn-points">+4</strong>
+                        </button>
+
+                        <button class="score-button red-btn" data-side="red" data-points="2" data-key="J"
+                            title="+2 Poin">
+                            <img src="icon/poin 2.svg" class="btn-svg-icon" alt="+2">
+                            <strong class="btn-points">+2</strong>
+                        </button>
+
+                        <!-- Row 3: Gam-jeom & (+1) [mirrored] -->
+                        <button class="score-button gamjeom-button red-gamjeom-btn" data-side="red"
+                            data-action="gamjeom" data-key="O" title="Gam-jeom (Lawan +1)">
+                            <img src="icon/gamjeom.svg" class="btn-svg-icon gamjeom-svg-icon" alt="Gamjeom">
+                            <strong class="btn-points penalty-val">+1</strong>
+                        </button>
+
+                        <button class="score-button red-btn fist-button" data-side="red" data-points="1" data-key="L"
+                            title="+1 Poin">
+                            <img src="icon/poin 1.svg" class="btn-svg-icon" alt="+1">
+                            <strong class="btn-points">+1</strong>
+                        </button>
+                    </div>
+
+                    <!-- Controller Grip Accent Details -->
+                    <div class="grip-texture">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Bottom Guide Bar -->
+        <footer class="bottom-controller-bar">
+            <div class="grip-indicator left">
+                <span class="indicator-bar blue-bar"></span>
+                <span>LEFT THUMB ZONE • CHUNG ATTACKS & GAMJEOM</span>
+            </div>
+            <div class="center-hints">
+                <span>🎮 SISTEM BEST OF 3 • KLIK ANGKA SKOR UNTUK EDIT MANUAL • GAMJEOM MAX 5</span>
+            </div>
+            <div class="grip-indicator right">
+                <span>RIGHT THUMB ZONE • HUNG ATTACKS & GAMJEOM</span>
+                <span class="indicator-bar red-bar"></span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Round Winner & Match Result Modal -->
+    <dialog id="roundModal" class="round-modal">
+        <div class="modal-box round-result-box">
+            <div class="result-header">
+                <span class="trophy-icon" id="resultIcon">🏆</span>
+                <h2 id="resultTitle">HASIL RONDE 1</h2>
+                <p id="resultSubtitle" class="result-subtitle">Pemenang Ronde Ditetapkan</p>
+            </div>
+
+            <div class="result-scores-card">
+                <div class="result-side blue-result">
+                    <span class="side-tag">CHUNG (BIRU)</span>
+                    <strong id="modalBlueName">CHUNG</strong>
+                    <div class="result-score-val" id="modalBlueScore">0</div>
+                    <span class="result-gamjeom-val" id="modalBlueGamjeom">Gam-jeom: 0</span>
+                </div>
+
+                <div class="result-divider">
+                    <span>VS</span>
+                </div>
+
+                <div class="result-side red-result">
+                    <span class="side-tag">HUNG (MERAH)</span>
+                    <strong id="modalRedName">HUNG</strong>
+                    <div class="result-score-val" id="modalRedScore">0</div>
+                    <span class="result-gamjeom-val" id="modalRedGamjeom">Gam-jeom: 0</span>
+                </div>
+            </div>
+
+            <!-- Match Standing Summary -->
+            <div class="match-standing" id="matchStanding">
+                <div class="standing-label">KEDUDUKAN RONDE:</div>
+                <div class="standing-val" id="standingText">CHUNG 1 — 0 HUNG</div>
+            </div>
+
+            <!-- Tie-breaker decision if score tied -->
+            <div class="tie-breaker-panel" id="tieBreakerPanel" style="display: none;">
+                <p>Skor Ronde Seri! Wasit menentukan pemenang ronde berdasarkan keunggulan teknik:</p>
+                <div class="tie-buttons">
+                    <button id="tieBlueWins" class="tie-btn blue-tie-btn">PILIH CHUNG MENANG</button>
+                    <button id="tieRedWins" class="tie-btn red-tie-btn">PILIH HUNG MENANG</button>
+                </div>
+            </div>
+
+            <div class="modal-actions" id="normalModalActions">
+                <button id="nextRoundBtn" class="action-btn next-round-btn">
+                    <span>LANJUT KE RONDE BERIKUTNYA ▶</span>
+                </button>
+                <button id="resetMatchModalBtn" class="action-btn reset-btn-modal" style="display: none;">
+                    <span>RESET PERTANDINGAN BARU ⟲</span>
+                </button>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- Keyboard Shortcuts Modal -->
+    <dialog id="keyModal" class="shortcuts-modal">
+        <div class="modal-box">
+            <div class="modal-head">
+                <h2>🎮 PETUNJUK KONTROLER KEYBOARD</h2>
+                <button id="closeModal" class="close-btn" aria-label="Tutup">✕</button>
+            </div>
+            <div class="modal-grid">
+                <div class="modal-col blue-col">
+                    <h3>SUDUT BIRU (Tangan Kiri)</h3>
+                    <ul>
+                        <li><kbd>Q</kbd> : Poin +3</li>
+                        <li><kbd>W</kbd> : Poin +6</li>
+                        <li><kbd>A</kbd> : Poin +2</li>
+                        <li><kbd>S</kbd> : Poin +4</li>
+                        <li><kbd>D</kbd> : Poin +1</li>
+                        <li><kbd>E</kbd> : Gam-jeom (Lawan +1)</li>
+                        <li><kbd>Z</kbd> : L1 Undo Poin</li>
+                    </ul>
+                </div>
+                <div class="modal-col center-col">
+                    <h3>PUSAT / TIMER & REVISI</h3>
+                    <ul>
+                        <li><kbd>SPACE</kbd> : Mulai / Jeda Timer</li>
+                        <li><kbd>KLIK SKOR</kbd> : Muncul tombol revisi cepat (+1, +2, +3, -1, -2, -3)</li>
+                    </ul>
+                </div>
+                <div class="modal-col red-col">
+                    <h3>SUDUT MERAH (Tangan Kanan)</h3>
+                    <ul>
+                        <li><kbd>U</kbd> : Poin +3</li>
+                        <li><kbd>I</kbd> : Poin +6</li>
+                        <li><kbd>J</kbd> : Poin +2</li>
+                        <li><kbd>K</kbd> : Poin +4</li>
+                        <li><kbd>L</kbd> : Poin +1</li>
+                        <li><kbd>O</kbd> : Gam-jeom (Lawan +1)</li>
+                        <li><kbd>M</kbd> : R1 Undo Poin</li>
+                    </ul>
+                </div>
+            </div>
+            <p class="modal-note">* Tombol keyboard aktif otomatis selama tidak sedang mengetik skor manual atau nama
+                atlet.</p>
+        </div>
+    </dialog>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
