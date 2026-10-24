@@ -386,57 +386,92 @@ function toggleTimer() {
   }
 }
 
-function openSettingsModal() {
-  const modal = document.getElementById("settingsModal");
-  if (!modal) return;
-
-  const currentMinutes = Math.floor(configuredTime / 60);
-  const currentSeconds = configuredTime % 60;
-
+function initSettingsModal() {
   const minSelect = document.getElementById("minutesSelect");
   const secSelect = document.getElementById("secondsSelect");
   const maxSelect = document.getElementById("maxScoreSelect");
 
-  if (minSelect) minSelect.value = currentMinutes.toString();
-  if (secSelect) secSelect.value = currentSeconds.toString();
-  if (maxSelect) maxSelect.value = maxScore.toString();
-
-  if (typeof modal.showModal === "function") {
-    modal.showModal();
+  if (minSelect && minSelect.children.length === 0) {
+    for (let m = 0; m <= 30; m++) {
+      const opt = document.createElement("option");
+      opt.value = m;
+      opt.textContent = `${m} Menit`;
+      if (m === 2) opt.selected = true;
+      minSelect.appendChild(opt);
+    }
   }
-}
 
-function closeSettingsModal() {
+  if (secSelect && secSelect.children.length === 0) {
+    for (let s = 0; s <= 59; s += 5) {
+      const opt = document.createElement("option");
+      opt.value = s;
+      opt.textContent = `${s < 10 ? "0" + s : s} Detik`;
+      if (s === 0) opt.selected = true;
+      secSelect.appendChild(opt);
+    }
+  }
+
+  const openBtn = document.getElementById("openSettingsBtn");
   const modal = document.getElementById("settingsModal");
-  if (modal && modal.open) {
-    modal.close();
+  const closeBtn = document.getElementById("closeSettingsModal");
+  const applyBtn = document.getElementById("applySettingsBtn");
+
+  if (openBtn && modal) {
+    openBtn.addEventListener("click", () => {
+      // Sync current values to dropdowns
+      const currentMins = Math.floor(configuredTime / 60);
+      const currentSecs = configuredTime % 60;
+      if (minSelect) minSelect.value = currentMins;
+      if (secSelect) secSelect.value = currentSecs;
+      if (maxSelect) maxSelect.value = maxScore;
+      if (typeof modal.showModal === "function") modal.showModal();
+    });
   }
-}
 
-function applySettingsFromModal() {
-  const minSelect = document.getElementById("minutesSelect");
-  const secSelect = document.getElementById("secondsSelect");
-  const maxSelect = document.getElementById("maxScoreSelect");
+  if (closeBtn && modal) {
+    closeBtn.addEventListener("click", () => {
+      modal.close();
+    });
+  }
 
-  const minutes = Number.parseInt(minSelect ? minSelect.value : "2", 10) || 0;
-  const seconds = Number.parseInt(secSelect ? secSelect.value : "0", 10) || 0;
-  const newMax = Number.parseInt(maxSelect ? maxSelect.value : "20", 10) || 0;
+  if (modal) {
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) modal.close();
+    });
+  }
 
-  stopTimer();
+  if (applyBtn && modal) {
+    applyBtn.addEventListener("click", () => {
+      const minutes = Number.parseInt(minSelect.value, 10) || 0;
+      const seconds = Number.parseInt(secSelect.value, 10) || 0;
+      const parsedMax = Number.parseInt(maxSelect.value, 10);
 
-  configuredTime = minutes * 60 + seconds;
-  remainingTime = configuredTime;
-  maxScore = newMax;
+      stopTimer();
 
-  updateMaxScoreDisplay();
-  updateTimerDisplay();
-  updateStatusIndicator("STANDBY");
+      configuredTime = minutes * 60 + seconds;
+      remainingTime = configuredTime;
 
-  closeSettingsModal();
+      maxScore = isNaN(parsedMax) || parsedMax < 0 ? 0 : parsedMax;
+      updateMaxScoreDisplay();
+      updateTimerDisplay();
+      updateStatusIndicator("STANDBY");
+
+      modal.close();
+    });
+  }
 }
 
 function setTimer() {
-  applySettingsFromModal();
+  // Legacy / Direct programmatic timer sync
+  const minSelect = document.getElementById("minutesSelect");
+  const secSelect = document.getElementById("secondsSelect");
+  if (minSelect && secSelect) {
+    const minutes = Number.parseInt(minSelect.value, 10) || 0;
+    const seconds = Number.parseInt(secSelect.value, 10) || 0;
+    configuredTime = minutes * 60 + seconds;
+    remainingTime = configuredTime;
+    updateTimerDisplay();
+  }
 }
 
 function restartTimer() {
@@ -854,40 +889,6 @@ if (setTimerBtn) setTimerBtn.addEventListener("click", setTimer);
 document.getElementById("restartTimer").addEventListener("click", restartTimer);
 document.getElementById("resetMatch").addEventListener("click", resetMatch);
 
-// Match Settings Modal Trigger & Buttons
-const openSettingsBtn = document.getElementById("openMatchSettings");
-if (openSettingsBtn) {
-  openSettingsBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    openSettingsModal();
-  });
-}
-
-const closeSettingsBtn = document.getElementById("closeSettingsModal");
-if (closeSettingsBtn) {
-  closeSettingsBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    closeSettingsModal();
-  });
-}
-
-const saveSettingsBtn = document.getElementById("saveMatchSettings");
-if (saveSettingsBtn) {
-  saveSettingsBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    applySettingsFromModal();
-  });
-}
-
-const settingsModalEl = document.getElementById("settingsModal");
-if (settingsModalEl) {
-  settingsModalEl.addEventListener("click", (e) => {
-    if (e.target === settingsModalEl) {
-      closeSettingsModal();
-    }
-  });
-}
-
 // Tie-breaker decisions
 if (tieBlueWins) {
   tieBlueWins.addEventListener("click", () => {
@@ -1020,6 +1021,7 @@ if (maxScoreInput) {
 
 // Initialise state
 setupEditableScores();
+initSettingsModal();
 updateScoreDisplay("blue");
 updateScoreDisplay("red");
 updateGamjeomDisplay("blue");
