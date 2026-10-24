@@ -2023,7 +2023,166 @@ body {
     border-radius: 5px;
   }
 
+  /* Popover Revisi Skor di Mobile Landscape */
+  .score-revision-popover {
+    width: min(190px, 45vw) !important;
+    padding: 6px 8px !important;
+    gap: 4px !important;
+    border-radius: 10px;
+    z-index: 9999;
+  }
+
+  .popover-head {
+    padding-bottom: 2px;
+  }
+
+  .popover-title {
+    font-size: 7.5px !important;
+  }
+
+  .popover-close-btn {
+    width: 18px !important;
+    height: 18px !important;
+    font-size: 9px !important;
+  }
+
+  .popover-row {
+    gap: 4px !important;
+  }
+
+  .rev-btn {
+    height: 28px !important;
+    font-size: 13px !important;
+    border-radius: 6px !important;
+  }
+
+  /* Modal Hasil Pertandingan di Mobile Landscape */
+  .round-modal {
+    padding: 4px !important;
+  }
+
+  .round-result-box {
+    width: min(440px, 92vw) !important;
+    max-height: 94vh !important;
+    max-height: 94dvh !important;
+    padding: 8px 12px !important;
+    gap: 5px !important;
+    border-radius: 12px;
+  }
+
+  .result-header .trophy-icon {
+    font-size: 20px !important;
+    margin-bottom: 0 !important;
+  }
+
+  .result-header h2 {
+    font-size: 13px !important;
+  }
+
+  .result-subtitle {
+    font-size: 9px !important;
+  }
+
+  .result-scores-card {
+    padding: 4px 8px !important;
+    border-radius: 8px;
+  }
+
+  .side-tag {
+    font-size: 7.5px !important;
+  }
+
+  .result-side strong {
+    font-size: 11px !important;
+  }
+
+  .result-score-val {
+    font-size: 24px !important;
+  }
+
+  .result-gamjeom-val {
+    font-size: 8px !important;
+  }
+
+  .match-standing {
+    padding: 3px 6px !important;
+    border-radius: 6px;
+  }
+
+  .standing-label {
+    font-size: 7.5px !important;
+  }
+
+  .standing-val {
+    font-size: 12px !important;
+  }
+
+  .tie-breaker-panel {
+    padding: 4px 8px !important;
+    gap: 4px !important;
+  }
+
+  .tie-breaker-panel p {
+    font-size: 8.5px !important;
+  }
+
+  .tie-btn {
+    padding: 4px !important;
+    font-size: 8.5px !important;
+  }
+
+  .action-btn {
+    padding: 7px 4px !important;
+    font-size: 10px !important;
+    border-radius: 6px !important;
+  }
+
   .bottom-controller-bar {
     display: none !important;
+  }
+}
+
+/* Extra Landscape Phone (Height <= 420px: iPhone Landscape, Android 16:9 Landscape) */
+@media (max-height: 420px) and (orientation: landscape) {
+  .score-revision-popover {
+    width: 175px !important;
+    padding: 4px 6px !important;
+    gap: 3px !important;
+  }
+
+  .rev-btn {
+    height: 24px !important;
+    font-size: 12px !important;
+  }
+
+  .round-result-box {
+    width: min(420px, 90vw) !important;
+    padding: 6px 10px !important;
+    gap: 4px !important;
+  }
+
+  .result-header .trophy-icon {
+    display: none !important; /* Sembunyikan ikon trofi besar agar hemat ruang */
+  }
+
+  .result-header h2 {
+    font-size: 12px !important;
+  }
+
+  .result-subtitle {
+    font-size: 8.5px !important;
+  }
+
+  .result-scores-card {
+    padding: 2px 6px !important;
+  }
+
+  .result-score-val {
+    font-size: 20px !important;
+  }
+
+  .action-btn {
+    padding: 5px 3px !important;
+    font-size: 9.5px !important;
   }
 }
