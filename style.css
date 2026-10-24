@@ -1381,78 +1381,86 @@ body {
 }
 
 /* ====================================================
-   ROUND WINNER & MATCH RESULT MODAL
+   ROUND WINNER & MATCH RESULT MODAL (FIT 1 SCREEN)
    ==================================================== */
 .round-modal {
   margin: auto;
   border: none;
   background: transparent;
-  padding: 20px;
+  padding: 8px;
+  max-height: 98vh;
+  max-height: 98dvh;
 }
 
 .round-modal::backdrop {
-  background: rgba(0, 0, 0, 0.82);
+  background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(10px);
 }
 
 .round-result-box {
   background: #101626;
   border: 2px solid #2a3754;
-  border-radius: 24px;
-  padding: 28px;
-  width: min(580px, 94vw);
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.95);
+  border-radius: 20px;
+  padding: clamp(10px, 2.5vh, 22px);
+  width: min(520px, 94vw);
+  max-height: 96vh;
+  max-height: 96dvh;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.95);
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: clamp(6px, 1.6vh, 14px);
   text-align: center;
+  overflow: hidden;
 }
 
 .result-header .trophy-icon {
-  font-size: 48px;
+  font-size: clamp(24px, 5vh, 40px);
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 2px;
+  line-height: 1;
   animation: bounce-trophy 1.2s infinite alternate ease-in-out;
 }
 
 @keyframes bounce-trophy {
   0% { transform: translateY(0); }
-  100% { transform: translateY(-8px); }
+  100% { transform: translateY(-4px); }
 }
 
 .result-header h2 {
   font-family: var(--font-digital);
-  font-size: 22px;
+  font-size: clamp(15px, 3vh, 20px);
   font-weight: 900;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   color: #f8fafc;
+  line-height: 1.15;
 }
 
 .result-subtitle {
-  font-size: 13px;
+  font-size: clamp(10px, 2vh, 12px);
   color: #94a3b8;
   font-weight: 600;
+  line-height: 1.2;
 }
 
 .result-scores-card {
   display: grid;
-  grid-template-columns: 1fr 40px 1fr;
+  grid-template-columns: 1fr 36px 1fr;
   align-items: center;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  padding: 16px;
+  border-radius: 14px;
+  padding: clamp(6px, 1.8vh, 12px);
 }
 
 .result-side {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
 }
 
 .side-tag {
-  font-size: 9px;
+  font-size: clamp(8px, 1.5vh, 9px);
   font-weight: 800;
   letter-spacing: 1px;
 }
@@ -1461,82 +1469,85 @@ body {
 .red-result .side-tag { color: var(--red-accent); }
 
 .result-side strong {
-  font-size: 15px;
+  font-size: clamp(12px, 2.2vh, 14px);
   text-transform: uppercase;
 }
 
 .result-score-val {
   font-family: var(--font-digital);
-  font-size: 42px;
+  font-size: clamp(26px, 6vh, 38px);
   font-weight: 900;
+  line-height: 1;
 }
 
 .blue-result .result-score-val { color: var(--blue-accent); }
 .red-result .result-score-val { color: var(--red-accent); }
 
 .result-gamjeom-val {
-  font-size: 10px;
+  font-size: clamp(8.5px, 1.6vh, 10px);
   color: #fde047;
   font-weight: 700;
 }
 
 .result-divider {
   font-family: var(--font-digital);
-  font-size: 14px;
+  font-size: clamp(11px, 2vh, 13px);
   font-weight: 900;
   color: var(--text-muted);
 }
 
 .match-standing {
   background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  padding: 10px;
+  border-radius: 10px;
+  padding: clamp(4px, 1.2vh, 8px);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .standing-label {
-  font-size: 10px;
+  font-size: clamp(8px, 1.5vh, 9px);
   font-weight: 800;
-  letter-spacing: 1.5px;
+  letter-spacing: 1.2px;
   color: var(--text-muted);
   margin-bottom: 2px;
 }
 
 .standing-val {
   font-family: var(--font-digital);
-  font-size: 18px;
+  font-size: clamp(13px, 2.8vh, 16px);
   font-weight: 900;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   color: #38bdf8;
+  line-height: 1.1;
 }
 
 .tie-breaker-panel {
   background: rgba(245, 158, 11, 0.12);
   border: 1px solid rgba(245, 158, 11, 0.4);
-  border-radius: 12px;
-  padding: 12px;
+  border-radius: 10px;
+  padding: clamp(6px, 1.5vh, 10px);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
 }
 
 .tie-breaker-panel p {
-  font-size: 11px;
+  font-size: clamp(9px, 1.8vh, 10.5px);
   font-weight: 700;
   color: #fde047;
+  line-height: 1.2;
 }
 
 .tie-buttons {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 8px;
 }
 
 .tie-btn {
-  padding: 10px;
-  border-radius: 8px;
+  padding: clamp(6px, 1.5vh, 9px);
+  border-radius: 7px;
   border: none;
-  font-size: 11px;
+  font-size: clamp(9px, 1.8vh, 10.5px);
   font-weight: 800;
   cursor: pointer;
   color: #fff;
@@ -1553,17 +1564,17 @@ body {
 .modal-actions {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .action-btn {
   width: 100%;
-  padding: 14px;
-  border-radius: 12px;
+  padding: clamp(8px, 2vh, 12px);
+  border-radius: 10px;
   border: none;
-  font-size: 13px;
+  font-size: clamp(10.5px, 2.2vh, 12.5px);
   font-weight: 900;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
   cursor: pointer;
   transition: all 0.15s;
 }
